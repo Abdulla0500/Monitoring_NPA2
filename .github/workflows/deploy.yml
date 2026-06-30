@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main  # или ваша основная ветка, например master
+      - main
 
 jobs:
   deploy:
