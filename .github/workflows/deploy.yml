@@ -32,5 +32,6 @@ jobs:
           script: |
             cd /root/Monitoring_NPA2
             docker compose down -v
+            
             docker compose up -d --build
             docker system prune -f
