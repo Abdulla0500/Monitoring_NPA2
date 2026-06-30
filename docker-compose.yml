@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -13,7 +13,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - bot_network
+      - bot_network # <-- ОДНА СЕТЬ ДЛЯ ВСЕХ
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U Abdulla"]
@@ -38,8 +38,9 @@ services:
     volumes:
       - ./:/app
     networks:
-      - bot_network
+      - bot_network # <-- ОДНА СЕТЬ ДЛЯ ВСЕХ
     restart: unless-stopped
+
   updater:
     build: .
     depends_on:
@@ -55,6 +56,9 @@ services:
       DEBUG: "True"
     command: sh -c "while true; do python worker.py; sleep 86400; done"
     restart: always
+    networks:
+      - bot_network # <-- ОДНА СЕТЬ ДЛЯ ВСЕХ
+
 networks:
   bot_network:
     driver: bridge
