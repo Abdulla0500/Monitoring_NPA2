@@ -8,7 +8,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from datetime import datetime
 from database import Database
 from Dictionaries import STAGE_DESCRIPTIONS, STATUS_DESCRIPTIONS, PROCEDURE_TYPES, TOPICS
-
+from classifier import ProjectClassifier
 logger = logging.getLogger(__name__)
 
 
@@ -24,12 +24,8 @@ class SearchStates(StatesGroup):
 
 # ---------- Универсальная отправка длинных сообщений ----------
 async def send_long_message(target, text, parse_mode="Markdown", reply_markup=None):
-    """
-    Отправляет длинное сообщение, разбивая на части по 4096 символов.
-    target: может быть CallbackQuery или Message
-    """
     if len(text) <= 4096:
-        if hasattr(target, 'message'):  # CallbackQuery
+        if hasattr(target, 'message'):  
             await target.message.edit_text(text, parse_mode=parse_mode, reply_markup=reply_markup)
         else:  # Message
             await target.answer(text, parse_mode=parse_mode, reply_markup=reply_markup)
@@ -228,7 +224,8 @@ async def start_developer_search(callback: types.CallbackQuery, state: FSMContex
     )
     await state.set_state(SearchStates.waiting_for_developer_search)
 
-
+def matches_morph(text: str, pattern: str) -> bool:
+    return ProjectClassifier._matches(text, pattern)
 async def process_developer_search(message: types.Message, state: FSMContext, db: Database):
     search_text = message.text.strip()
     if len(search_text) < 2:
@@ -236,7 +233,7 @@ async def process_developer_search(message: types.Message, state: FSMContext, db
         return
 
     developers = await db.get_unique_developers()
-    filtered = [d for d in developers if search_text.lower() in d.lower()]
+    filtered = [d for d in developers if matches_morph(d, search_text)]
     await state.update_data(all_developers=developers, dev_filter=search_text, dev_offset=0)
 
     class FakeCallback:
@@ -555,9 +552,7 @@ async def send_search_results_as_message(message: types.Message, projects, query
 
 
 async def send_search_results(callback: types.CallbackQuery, projects, query, page, state, per_page=10):
-    """
-    Отправляет результаты поиска с кнопками добавления для каждого проекта.
-    """
+
     total = len(projects)
     start = page * per_page
     end = min(start + per_page, total)
@@ -639,16 +634,6 @@ async def send_search_results(callback: types.CallbackQuery, projects, query, pa
     await state.update_data(search_results=projects, search_query=query, page=page)
 
 
-def _format_filter_value(key, value):
-    if key == "Тематика":
-        return TOPICS.get(value, value)
-    if key == "Этап":
-        return STAGE_DESCRIPTIONS.get(value, value)
-    if key == "Статус":
-        return STATUS_DESCRIPTIONS.get(value, value)
-    return value
-
-
 async def search_in_db(db: Database, search_text: str) -> list:
     pattern = f"%{search_text}%"
     query = """
@@ -678,4 +663,6 @@ async def search_in_db(db: Database, search_text: str) -> list:
             'classified_topics': topics_val or [],
             'stages_info': row['stages_info'] or ''
         })
+    if search_text:
+        projects = [p for p in projects if matches_morph(p['title'], search_text)]
     return projects
