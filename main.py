@@ -84,7 +84,17 @@ async def cmd_start(message: types.Message):
 @router.callback_query()
 async def button_handler(callback: types.CallbackQuery, state: FSMContext):
     data = callback.data  
-    user_id = callback.from_user.id
+    user = callback.from_user
+    user_id = user.id
+    
+    # ←←←←←←←←←←←←←←←←←←←←←←←←←←
+    # Обновляем пользователя при каждом нажатии кнопки
+    await db.add_user(
+        telegram_id=user.id,
+        first_name=user.first_name,
+        last_name=user.last_name,
+        username=user.username
+    )
     logger.info(f"Пользователь {user_id} нажал кнопку: {data}")
 
     if data == "menu_current":
