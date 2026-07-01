@@ -6,7 +6,7 @@ class Config:
         'host': os.getenv('DB_HOST', '127.0.0.1'),
         'port': int(os.getenv('DB_PORT', '5432')),
         'database': os.getenv('DB_NAME', 'monitoring_db'),
-        'user': os.getenv('DB_USER', 'Abdulla'),
+        'user': os.getenv('DB_USER', 'postgres'),
         'password': os.getenv('DB_PASSWORD', '12332144'),
     }
     
