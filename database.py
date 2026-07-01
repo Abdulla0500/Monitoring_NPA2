@@ -83,7 +83,11 @@ class Database:
                 saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE(user_id, project_id)
             )
+            """,
             """
+            CREATE INDEX IF NOT EXISTS projects_title_fts_idx
+            ON projects
+            USING GIN (to_tsvector('russian', coalesce(title, '')));"""
         ]
         async with self.pool.acquire() as conn:
             for query in queries:
@@ -537,8 +541,8 @@ class Database:
             param_index += 1
         
         if 'title' in filters:
-            conditions.append(f"title ILIKE ${param_index}")
-            params.append(f"%{filters['title']}%")
+            conditions.append(f"to_tsvector('russian', coalesce(title,'')) @@ plainto_tsquery('russian', ${param_index})")
+            params.append(filters['title'])
             param_index += 1
 
         if 'publication_date_range' in filters:
