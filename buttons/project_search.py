@@ -666,3 +666,4 @@ async def search_in_db(db: Database, search_text: str) -> list:
     if search_text:
         projects = [p for p in projects if ProjectClassifier.matches_phrase(p['title'], search_text)]
     return projects
+

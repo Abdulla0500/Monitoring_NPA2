@@ -449,13 +449,30 @@ class ProjectClassifier:
         return r"\s+".join(pattern_words)
     @staticmethod
     def matches_phrase(text: str, phrase: str) -> bool:
-        clean_text = re.sub(r'[^\w\s]', ' ', text.lower())
-        clean_text = ' '.join(clean_text.split())  
+        if not phrase or not text:
+            return False
 
-        words = phrase.lower().split()
-        for word in words:
-            if len(word) < 3:  
-                continue
-            if not ProjectClassifier._matches(clean_text, word):
+        # Очищаем текст и фразу
+        text_clean = re.sub(r'[^\w\s]', ' ', text.lower())
+        text_clean = ' '.join(text_clean.split())
+
+        phrase_clean = re.sub(r'[^\w\s]', ' ', phrase.lower())
+        phrase_words = [w for w in phrase_clean.split() if len(w) >= 2]
+
+        if not phrase_words:
+            return False
+
+        # Для каждого слова из запроса ищем его в тексте с учетом морфологии
+        for word in phrase_words:
+            # Базовая форма + возможные окончания
+            if len(word) > 4:
+                # Отрезаем 1-2 последние буквы и ищем
+                base = re.escape(word[:-2]) if len(word) > 6 else re.escape(word[:-1])
+                pattern = r'\b' + base + r'[а-яё]*\b'
+            else:
+                pattern = r'\b' + re.escape(word) + r'\b'
+
+            if not re.search(pattern, text_clean):
                 return False
+
         return True
