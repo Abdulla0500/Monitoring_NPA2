@@ -664,5 +664,5 @@ async def search_in_db(db: Database, search_text: str) -> list:
             'stages_info': row['stages_info'] or ''
         })
     if search_text:
-        projects = [p for p in projects if matches_morph(p['title'], search_text)]
+        projects = [p for p in projects if ProjectClassifier.matches_phrase(p['title'], search_text)]
     return projects

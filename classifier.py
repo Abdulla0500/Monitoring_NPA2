@@ -409,7 +409,7 @@ class ProjectClassifier:
             exclude_patterns = cls.EXCLUDE_PATTERNS.get(topic, [])
             excluded = False
             for exclude in exclude_patterns:
-                if cls._matches(title_lower, exclude):
+                if cls.matches_phrase(title_lower, exclude):
                     excluded = True
                     break
 
@@ -417,7 +417,7 @@ class ProjectClassifier:
                 continue
 
             for keyword in keywords:
-                if cls._matches(title_lower, keyword):
+                if cls.matches_phrase(title_lower, keyword):
                     found_topics.add(topic)
                     break
 
@@ -447,3 +447,15 @@ class ProjectClassifier:
                 pattern_words.append(f"{re.escape(base)}[а-я]*")
 
         return r"\s+".join(pattern_words)
+    @staticmethod
+    def matches_phrase(text: str, phrase: str) -> bool:
+        clean_text = re.sub(r'[^\w\s]', ' ', text.lower())
+        clean_text = ' '.join(clean_text.split())  
+
+        words = phrase.lower().split()
+        for word in words:
+            if len(word) < 3:  
+                continue
+            if not ProjectClassifier._matches(clean_text, word):
+                return False
+        return True
