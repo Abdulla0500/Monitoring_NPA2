@@ -83,7 +83,6 @@ async def cmd_start(message: types.Message):
 
 @router.callback_query()
 async def button_handler(callback: types.CallbackQuery, state: FSMContext):
-    await callback.answer()
     data = callback.data  
     user_id = callback.from_user.id
     logger.info(f"Пользователь {user_id} нажал кнопку: {data}")

@@ -99,8 +99,6 @@ class Database:
             first_name = EXCLUDED.first_name,
             last_name = EXCLUDED.last_name,
             username = EXCLUDED.username,
-            role = EXCLUDED.role,
-            notification_time = EXCLUDED.notification_time
         RETURNING user_id;
         """
 
