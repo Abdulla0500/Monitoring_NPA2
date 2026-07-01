@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 
 class SearchStates(StatesGroup):
-    waiting_for_query = State()
     waiting_for_filter = State()
     waiting_for_filter_value = State()
     waiting_for_title_filter = State()
@@ -504,52 +503,8 @@ async def filter_search_execute(callback: types.CallbackQuery, state: FSMContext
 async def back_to_filters(callback: types.CallbackQuery, state: FSMContext):
     await show_filters_menu(callback.message, state)
 
-
-# ---------- ОБЫЧНЫЙ ПОИСК ПО ТЕКСТУ ----------
-async def cancel_search(callback: types.CallbackQuery, state: FSMContext):
-    await state.clear()
-    from main import get_main_menu_keyboard
-    await send_long_message(callback, "📋 Главное меню", reply_markup=get_main_menu_keyboard())
-
-
-async def process_search_query(message: types.Message, state: FSMContext, db: Database):
-    query = message.text.strip()
-    if len(query) < 3:
-        await message.answer("❌ Минимум 3 символа")
-        return
-    projects = await search_in_db(db, query)
-    if not projects:
-        await message.answer(f"По запросу «{query}» ничего не найдено")
-        return
-    await send_search_results_as_message(message, projects, query, state)
-
-
 # ---------- ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ ----------
-async def send_search_results_as_message(message: types.Message, projects, query, state, per_page=10):
-    total = len(projects)
-    start = 0
-    end = min(per_page, total)
-    chunk = projects[start:end]
 
-    text = f"🔍 Результаты по запросу: {query}\n📊 Найдено: {total}\n\n"
-    for idx, p in enumerate(chunk, 1):
-        title = p.get('title', 'Без названия')
-        dept = p.get('developedDepartment', {}).get('description', 'Не указано')
-        date = p.get('publicationDate', '') or p.get('creationDate', '')
-        date_str = date[:10] if date else 'Дата не указана'
-        proj_id = p.get('id')
-        text += f"{idx}. **{title}**\n\n\n   🏢 {dept}\n\n\n   📅 {date_str}\n\n\n   🔗 https://regulation.gov.ru/projects#npa={proj_id}\n\n"
-
-    keyboard = []
-    if total > per_page:
-        keyboard.append([InlineKeyboardButton(text="Вперёд ▶️", callback_data="search_page|1")])
-    keyboard.append([
-        InlineKeyboardButton(text="🔍 Новый поиск", callback_data="search_start"),
-        InlineKeyboardButton(text="◀️ Главное меню", callback_data="back_to_main")
-    ])
-    markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
-    await send_long_message(message, text, parse_mode="Markdown", reply_markup=markup)
-    await state.update_data(search_results=projects, search_query=query, page=0)
 
 
 async def send_search_results(callback: types.CallbackQuery, projects, query, page, state, per_page=10):
@@ -633,54 +588,3 @@ async def send_search_results(callback: types.CallbackQuery, projects, query, pa
 
     # Сохраняем данные в состоянии для пагинации
     await state.update_data(search_results=projects, search_query=query, page=page)
-
-
-async def search_in_db(db: Database, search_text: str) -> list:
-    words = search_text.lower().split()
-
-    parts = []
-    for word in words:
-        if len(word) > 6:
-            parts.append(word[:-2])
-        elif len(word) > 4:
-            parts.append(word[:-1])
-        else:
-            parts.append(word)
-
-    pattern = "%" + "%".join(parts) + "%"
-    query = """
-        SELECT external_id as id, title, department, creation_date, publication_date, raw_json, topics, stages_info
-        FROM projects
-        WHERE title ILIKE $1 OR department ILIKE $1 OR raw_json->>'description' ILIKE $1
-        ORDER BY publication_date DESC NULLS LAST LIMIT 10000
-    """
-    async with db.pool.acquire() as conn:
-        rows = await conn.fetch(query, pattern)
-    projects = []
-    for row in rows:
-        raw = row['raw_json']
-        if isinstance(raw, str):
-            import json
-            raw = json.loads(raw)
-        topics_val = row['topics']
-        if isinstance(topics_val, str):
-            topics_val = json.loads(topics_val)
-        projects.append({
-            'id': row['id'],
-            'title': row['title'],
-            'developedDepartment': {'description': row['department']} if row['department'] else None,
-            'creationDate': row['creation_date'].isoformat() if row['creation_date'] else None,
-            'publicationDate': row['publication_date'].isoformat() if row['publication_date'] else None,
-            'raw_json': raw,
-            'classified_topics': topics_val or [],
-            'stages_info': row['stages_info'] or ''
-        })
-    if search_text:
-        projects = [
-            p for p in projects
-            if (
-                ProjectClassifier.matches_phrase(p["title"], search_text)
-            )
-        ]
-    return projects
-

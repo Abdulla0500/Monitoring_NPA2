@@ -14,9 +14,8 @@ import buttons.settings as set
 import buttons.archive_projects as arch
 import logging
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.storage.memory import MemoryStorage
 from buttons.project_search import (
-    SearchStates, start_search, process_search_query, cancel_search, send_search_results,
+    SearchStates, start_search, send_search_results,
     filter_developer, filter_stage, filter_procedure, filter_status, filter_pubdate,
     filter_discussion, filter_reset, save_filter_value, filter_search_execute,
     back_to_filters, process_date_start, process_date_end, filter_date_skip_start,
@@ -26,21 +25,14 @@ from buttons.project_search import (
 from buttons.favorite import(show_favorite_projects, send_favorite_chunked)
 from notifier import send_daily_notifications
 db = Database()
-storage = MemoryStorage()
-bot = None  
-
-
-
-dp = Dispatcher(storage=storage)
-router = Router()
 
 router = Router()
+
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
-scheduler = AsyncIOScheduler()
 
 def get_main_menu_keyboard():
     buttons = [
@@ -187,8 +179,6 @@ async def button_handler(callback: types.CallbackQuery, state: FSMContext):
         data.startswith("filter_proc_idx_") or data.startswith("filter_status_val_") or \
         data.startswith("filter_topic_idx_"):
         await save_filter_value(callback, state)
-    elif data == "cancel_search":
-        await cancel_search(callback, state)
     elif data.startswith("search_page|"):
         _, page_str = data.split("|")
         page = int(page_str)
@@ -288,9 +278,7 @@ async def button_handler(callback: types.CallbackQuery, state: FSMContext):
             parse_mode='Markdown',
             reply_markup=get_main_menu_keyboard()
         )
-@router.message(SearchStates.waiting_for_query)
-async def handle_search_query(message: types.Message, state: FSMContext):
-    await process_search_query(message, state, db)
+
 
 @router.message(SearchStates.waiting_for_date_start)
 async def handle_date_start(message: types.Message, state: FSMContext):
