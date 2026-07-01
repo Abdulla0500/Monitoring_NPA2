@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 async def update_new_projects(db: Database, days_back: int = 2):
     api = RegulationAPI()
+   
     
     logger.info("=" * 70)
     logger.info("🚀 ЗАПУСК ОПТИМИЗИРОВАННОГО ОБНОВЛЕНИЯ")
@@ -95,6 +96,7 @@ async def update_new_projects(db: Database, days_back: int = 2):
     logger.info(f"✅ ОБНОВЛЕНИЕ ЗАВЕРШЕНО ЗА {elapsed:.2f} СЕКУНД")
     logger.info(f"📊 Обработано проектов: {len(projects)}")
     logger.info("=" * 70)
+
 
 
 async def update_all_projects_and_stages(db: Database):
