@@ -8,6 +8,7 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+
 async def update_new_projects(db: Database, days_back: int = 2):
     api = RegulationAPI()
     
