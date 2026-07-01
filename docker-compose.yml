@@ -63,4 +63,6 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:
+    postgres_data:
+      external: true
+      name: monitoring_npa2_postgres_data
