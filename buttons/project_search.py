@@ -224,8 +224,6 @@ async def start_developer_search(callback: types.CallbackQuery, state: FSMContex
     )
     await state.set_state(SearchStates.waiting_for_developer_search)
 
-def matches_morph(text: str, pattern: str) -> bool:
-    return ProjectClassifier._matches(text, pattern)
 async def process_developer_search(message: types.Message, state: FSMContext, db: Database):
     search_text = message.text.strip()
     if len(search_text) < 2:
@@ -233,7 +231,10 @@ async def process_developer_search(message: types.Message, state: FSMContext, db
         return
 
     developers = await db.get_unique_developers()
-    filtered = [d for d in developers if matches_morph(d, search_text)]
+    
+    # Используем улучшенный поиск с морфологией
+    filtered = [d for d in developers if ProjectClassifier.matches_phrase(d, search_text)]
+
     await state.update_data(all_developers=developers, dev_filter=search_text, dev_offset=0)
 
     class FakeCallback:

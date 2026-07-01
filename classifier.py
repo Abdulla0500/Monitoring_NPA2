@@ -398,7 +398,6 @@ class ProjectClassifier:
     def classify(cls, title, department):
         if not title:
             return set()
-
         if department and department in cls.EXCLUDE_DEPARTMENTS:
             return set()
 
@@ -412,7 +411,6 @@ class ProjectClassifier:
                 if cls.matches_phrase(title_lower, exclude):
                     excluded = True
                     break
-
             if excluded:
                 continue
 
@@ -420,39 +418,15 @@ class ProjectClassifier:
                 if cls.matches_phrase(title_lower, keyword):
                     found_topics.add(topic)
                     break
-
         return list(found_topics)
 
-    @classmethod
-    def _matches(cls, text, phrase):
-        phrase_lower = phrase.lower()
-        if phrase_lower in text:
-            return True
-
-        if re.search(r'[.*+?[\](){}|^$\\]', phrase):
-            return re.search(phrase, text) is not None
-
-        return re.search(cls._make_morph_pattern(phrase), text) is not None
-
-    @staticmethod
-    def _make_morph_pattern(phrase):
-        words = phrase.lower().strip().split()
-        pattern_words = []
-
-        for word in words:
-            if re.search(r'\d|№|@|-|/', word):
-                pattern_words.append(re.escape(word.lower()))
-            else:
-                base = word[:-1] if len(word) > 5 else word
-                pattern_words.append(f"{re.escape(base)}[а-я]*")
-
-        return r"\s+".join(pattern_words)
+    # ====================== НОВАЯ ЛОГИКА ======================
     @staticmethod
     def matches_phrase(text: str, phrase: str) -> bool:
         if not phrase or not text:
             return False
 
-        # Очищаем текст и фразу
+        # Очистка
         text_clean = re.sub(r'[^\w\s]', ' ', text.lower())
         text_clean = ' '.join(text_clean.split())
 
@@ -462,17 +436,13 @@ class ProjectClassifier:
         if not phrase_words:
             return False
 
-        # Для каждого слова из запроса ищем его в тексте с учетом морфологии
         for word in phrase_words:
-            # Базовая форма + возможные окончания
             if len(word) > 4:
-                # Отрезаем 1-2 последние буквы и ищем
                 base = re.escape(word[:-2]) if len(word) > 6 else re.escape(word[:-1])
                 pattern = r'\b' + base + r'[а-яё]*\b'
             else:
-                pattern = r'\b' + re.escape(word) + r'\b'
+                pattern = r'\b' + re.escape(word) + r'[а-яё]*\b'
 
             if not re.search(pattern, text_clean):
                 return False
-
         return True
