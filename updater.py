@@ -63,7 +63,7 @@ async def update_new_projects(db: Database, days_back: int = 2):
                 stages_str = ""
                 if need_stages_update:
                     logger.info(f"Загружаем этапы для проекта {proj_id}")
-                    stages_json = await api.fetch_project_stages(session, proj_id)
+                    stages_json = await api.fetch_project_stages(proj_id, session)
                     stages_str = format_stages_json(stages_json) if stages_json else ""
                 else:
                     stages_str = existing.get('stages_info', "") if existing else ""
@@ -127,7 +127,7 @@ async def update_all_projects_and_stages(db: Database):
                 proj_id = proj['id']
                 
                 logger.info(f"📥 Загружаем этапы для проекта {proj_id}")
-                stages_json = await api.fetch_project_stages(session, proj_id)
+                stages_json = await api.fetch_project_stages(proj_id, session)
                 stages_str = format_stages_json(stages_json) if stages_json else ""
                 
                 project_data = {
