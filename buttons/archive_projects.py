@@ -106,7 +106,7 @@ async def save_projects_to_db(db, projects, concurrency=10):
     logger.info(f"Сохранено/обновлено {saved} проектов из {len(projects)}")
 
 
-async def show_archive_topics(callback, topic , db):
+async def show_archive_topics(callback):
     keyboard = []
     row = []
     for i, (topic_code, topic_name) in enumerate(TOPICS.items(), 1):

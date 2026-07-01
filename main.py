@@ -192,7 +192,7 @@ async def button_handler(callback: types.CallbackQuery, state: FSMContext):
             await callback.message.edit_text("❌ Данные поиска устарели. Начните новый поиск.")
             await start_search(callback, state)
     elif data == "menu_archive":
-        await arch.show_archive_topics(callback, db, topic=None)
+        await arch.show_archive_topics(callback)
     elif data.startswith('archive_'):
         topic = data.replace('archive_', '')
         await arch.show_archive_projects(callback, topic, db)
