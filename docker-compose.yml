@@ -36,12 +36,9 @@ services:
       DB_PASSWORD: 12332144
       BOT_TOKEN: ${BOT_TOKEN}
       DEBUG: "True"
-    volumes:
-      - ./:/app
     networks:
       - bot_network # <-- ОДНА СЕТЬ ДЛЯ ВСЕХ
     restart: unless-stopped
-
 
   updater:
     build: .

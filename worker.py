@@ -3,7 +3,7 @@ import asyncio
 import logging
 import sys
 from database import Database
-from updater import update_all_projects_and_stages
+from updater import update_new_projects
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ async def main():
     db = Database()
     try:
         await db.connect()
-        await update_all_projects_and_stages(db)
+        await update_new_projects(db, days_back=2)
         logger.info("Обновление успешно завершено")
     except Exception as e:
         logger.exception(f"Ошибка во время обновления: {e}")
