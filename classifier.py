@@ -436,6 +436,7 @@ class ProjectClassifier:
         if not phrase_words:
             return False
 
+
         for word in phrase_words:
             if len(word) > 4:
                 base = re.escape(word[:-2]) if len(word) > 6 else re.escape(word[:-1])
