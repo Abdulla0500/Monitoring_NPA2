@@ -689,6 +689,41 @@ class Database:
                 'stages_info': row['stages_info'] or ''
             })
         return projects
+    async def get_projects_by_topic(self, topic: str) -> list:
+        query = """
+            SELECT
+                external_id as id,
+                title,
+                department,
+                creation_date,
+                publication_date,
+                stage,
+                status,
+                stages_info
+            FROM projects
+            WHERE topics ?| $1
+            ORDER BY publication_date DESC NULLS LAST
+        """
+        async with self.pool.acquire() as conn:
+            rows = await conn.fetch(query, [topic])
+
+        projects = []
+        for row in rows:
+            projects.append({
+                'id': row['id'],
+                'title': row['title'],
+                'developedDepartment': {'description': row['department']} if row['department'] else None,
+                'creationDate': row['creation_date'].isoformat() if row['creation_date'] else None,
+                'publicationDate': row['publication_date'].isoformat() if row['publication_date'] else None,
+                'stage': row['stage'],
+                'status': row['status'],
+                'stages_info': row['stages_info'] or '',
+            })
+        return projects
+    async def has_any_projects(self) -> bool:
+        query = "SELECT EXISTS(SELECT 1 FROM projects LIMIT 1)"
+        async with self.pool.acquire() as conn:
+            return await conn.fetchval(query)
         # -------------------- ЗАКРЫТИЕ --------------------
     async def close(self):
         if self.pool:

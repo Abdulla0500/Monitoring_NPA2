@@ -200,7 +200,7 @@ async def button_handler(callback: types.CallbackQuery, state: FSMContext):
         _, topic, start_index_str = data.split('|')
         start_index = int(start_index_str)
         user_id = await db.get_user_id(callback.from_user.id)
-        archive_key = f"archive_{topic}_{user_id}"
+        archive_key = f"archive_{topic}"
         filtered_projects = arch.projects_cache.get(archive_key, [])
         if filtered_projects:
             await arch.send_archive_chunked(
@@ -301,6 +301,7 @@ async def main():
     print("🚀 Запуск бота...")
     await db.connect()
     await db.create_tables()
+    await arch.bootstrap_projects_from_api(db)
     bot = Bot(token=config1.BOT_TOKEN)
     dp = Dispatcher()
     

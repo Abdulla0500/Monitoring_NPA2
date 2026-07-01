@@ -10,7 +10,7 @@ from datetime import datetime
 api = RegulationAPI()
 logger = logging.getLogger(__name__)
 
-CACHE_TTL = 86400  
+CACHE_TTL = 80400  
 _projects_cache = {}
 _fetch_lock = asyncio.Lock()  
 
@@ -33,29 +33,15 @@ def set_cached(key, data):
 def invalidate_cache():
     _projects_cache.clear()
 
-
-async def load_projects_from_db(db):
-    logger.debug("load_projects_from_db вызвана")
-    try:
-        rows = await db.get_all_projects()
-        if not rows:
-            return None
-        projects = []
-        for row in rows:
-            project = row.get('raw_json')
-            if project is not None:
-                if 'classified_topics' not in project:
-                    project['classified_topics'] = row.get('topics', [])
-                projects.append(project)
-            else:
-                logger.warning(f"Проект {row.get('id')} не имеет raw_json")
-        logger.info(f"Загружено {len(projects)} проектов из БД")
-        return projects
-    except Exception as e:
-        logger.error(f"Ошибка загрузки проектов из БД: {e}")
-        return None
-
-
+async def bootstrap_projects_from_api(db):
+    if await db.has_any_projects():
+        return
+    all_projects = await fetch_with_retry_simple(
+        lambda: api.fetch_all_projects_optimized(max_pages=None, page_size=20, max_concurrent=20),
+        max_retries=3, delay=2
+    )
+    if all_projects:
+        await save_projects_to_db(db, all_projects)
 async def save_projects_to_db(db, projects, concurrency=10):
     semaphore = asyncio.Semaphore(concurrency)
     saved = 0
@@ -120,7 +106,7 @@ async def save_projects_to_db(db, projects, concurrency=10):
     logger.info(f"Сохранено/обновлено {saved} проектов из {len(projects)}")
 
 
-async def show_archive_topics(callback):
+async def show_archive_topics(callback, topic , db):
     keyboard = []
     row = []
     for i, (topic_code, topic_name) in enumerate(TOPICS.items(), 1):
@@ -139,39 +125,6 @@ async def show_archive_topics(callback):
         reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard)
     )
 
-
-async def _get_all_projects(db):
-    """Загружает полный список проектов из кэша/БД/API с защитой от параллельного дублирования запроса."""
-    cache_key = "archive_all_projects"
-    all_projects = get_cached(cache_key)
-    if all_projects is not None:
-        return all_projects, None  # None = не нужно отправлять сообщение об ошибке
-
-    async with _fetch_lock:
-        # второй пользователь, пока первый ждал лок, мог уже дождаться результата
-        all_projects = get_cached(cache_key)
-        if all_projects is not None:
-            return all_projects, None
-
-        all_projects = await load_projects_from_db(db)
-        if all_projects:
-            logger.info(f"Загружено {len(all_projects)} проектов из БД")
-            set_cached(cache_key, all_projects)
-            return all_projects, None
-
-        all_projects = await fetch_with_retry_simple(
-            lambda: api.fetch_all_projects_optimized(max_pages=None, page_size=20, max_concurrent=20),
-            max_retries=3, delay=2
-        )
-        if all_projects:
-            logger.info(f"Загружено {len(all_projects)} проектов из API")
-            await save_projects_to_db(db, all_projects)
-            set_cached(cache_key, all_projects)
-            return all_projects, None
-
-        return None, "❌ Не удалось загрузить проекты.\nПопробуйте позже."
-
-
 async def show_archive_projects(callback, topic, db):
     await callback.answer()
     await callback.message.edit_text(f"🔍 Загружаю архив проектов по теме {TOPICS_SHORT.get(topic, topic)}...")
@@ -180,26 +133,7 @@ async def show_archive_projects(callback, topic, db):
     filtered_projects = get_cached(filtered_key)
 
     if filtered_projects is None:
-        # Сообщение "грузим с API ~8 минут" показываем только если реально идём во внешний API
-        if get_cached("archive_all_projects") is None:
-            await callback.message.edit_text(
-                "📡 Проверяю базу / при необходимости гружу с regulation.gov.ru "
-                "(первая загрузка может занять время)..."
-            )
-
-        all_projects, error = await _get_all_projects(db)
-        if error:
-            await callback.message.edit_text(
-                error,
-                reply_markup=InlineKeyboardMarkup(inline_keyboard=[[
-                    InlineKeyboardButton(text="◀️ Назад к темам", callback_data="menu_archive")
-                ]])
-            )
-            return
-
-        filtered_projects = [
-            p for p in all_projects if topic in p.get('classified_topics', [])
-        ]
+        filtered_projects = await db.get_projects_by_topic(topic)
         filtered_projects.sort(
             key=lambda x: x.get('publicationDate') or x.get('creationDate', '') or '0000-00-00',
             reverse=True
