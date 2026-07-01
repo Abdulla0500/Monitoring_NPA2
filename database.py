@@ -98,7 +98,7 @@ class Database:
         ON CONFLICT (telegram_id) DO UPDATE SET
             first_name = EXCLUDED.first_name,
             last_name = EXCLUDED.last_name,
-            username = EXCLUDED.username,
+            username = EXCLUDED.username
         RETURNING user_id;
         """
 
