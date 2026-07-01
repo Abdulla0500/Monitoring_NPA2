@@ -636,7 +636,18 @@ async def send_search_results(callback: types.CallbackQuery, projects, query, pa
 
 
 async def search_in_db(db: Database, search_text: str) -> list:
-    pattern = f"%{search_text}%"
+    words = search_text.lower().split()
+
+    parts = []
+    for word in words:
+        if len(word) > 6:
+            parts.append(word[:-2])
+        elif len(word) > 4:
+            parts.append(word[:-1])
+        else:
+            parts.append(word)
+
+    pattern = "%" + "%".join(parts) + "%"
     query = """
         SELECT external_id as id, title, department, creation_date, publication_date, raw_json, topics, stages_info
         FROM projects
@@ -665,6 +676,11 @@ async def search_in_db(db: Database, search_text: str) -> list:
             'stages_info': row['stages_info'] or ''
         })
     if search_text:
-        projects = [p for p in projects if ProjectClassifier.matches_phrase(p['title'], search_text)]
+        projects = [
+            p for p in projects
+            if (
+                ProjectClassifier.matches_phrase(p["title"], search_text)
+            )
+        ]
     return projects
 
