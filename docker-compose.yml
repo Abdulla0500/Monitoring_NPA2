@@ -16,7 +16,7 @@ services:
       - bot_network # <-- ОДНА СЕТЬ ДЛЯ ВСЕХ
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U Abdulla"]
+      test: ["CMD-SHELL", "pg_isready -U Abdulla -d monitoring_db"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -56,7 +56,7 @@ services:
     command: sh -c "while true; do python worker.py; sleep 86400; done"
     restart: always
     networks:
-      - bot_network # <-- ОДНА СЕТЬ ДЛЯ ВСЕХ
+      - bot_network 
 
 networks:
   bot_network:
