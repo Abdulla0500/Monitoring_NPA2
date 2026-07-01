@@ -39,6 +39,7 @@ async def update_new_projects(db: Database, days_back: int = 2):
                 
                 existing = await db.get_project_by_external_id(proj_id)
                 
+                
                 need_stages_update = False
                 
                 if not existing:
