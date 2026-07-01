@@ -7,7 +7,7 @@ from datetime import datetime
 api = RegulationAPI()
 all_projects=[]
 logger = logging.getLogger(__name__)
-
+print("show_archive_projects вызвана")
 projects_cache = {}  
 
 async def load_projects_from_db(db):
