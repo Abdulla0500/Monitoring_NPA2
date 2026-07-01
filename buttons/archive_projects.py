@@ -7,10 +7,11 @@ from datetime import datetime
 api = RegulationAPI()
 all_projects=[]
 logger = logging.getLogger(__name__)
-print("show_archive_projects вызвана")
+
 projects_cache = {}  
 
 async def load_projects_from_db(db):
+    print("DEBUG: load_projects_from_db вызвана", flush=True)
     try:
         rows = await db.get_all_projects()
         if not rows:
@@ -92,6 +93,7 @@ async def save_projects_to_db(db, projects):
 
     logger.info(f"Сохранено/обновлено {saved} проектов из {len(projects)}")
 async def show_archive_topics(callback):
+    print("DEBUG: show_archive_projects вызвана", flush=True)
     keyboard = []
     row = []
     for i, (topic_code, topic_name) in enumerate(TOPICS.items(), 1):
