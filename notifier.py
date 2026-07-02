@@ -67,10 +67,7 @@ def format_digest(projects, dates, role):
             body += f"{i}. {format_project_product(p)}\n"
         body += "━━━━━━━━━━━━━━━━━━━━\n\n"
     
-    footer = "\n🔔 *Ваши подписки:* "
-
-    
-    return header + body + footer
+    return header + body
 
 
 def format_no_projects(dates):
