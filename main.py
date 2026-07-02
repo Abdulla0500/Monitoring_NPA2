@@ -199,10 +199,9 @@ async def button_handler(callback: types.CallbackQuery, state: FSMContext):
     elif data.startswith('continue_archive|'):          
         _, topic, start_index_str = data.split('|')
         start_index = int(start_index_str)
-        user_id = await db.get_user_id(callback.from_user.id)
         archive_key = f"archive_{topic}"
-        filtered_projects = arch.projects_cache.get(archive_key, [])
-        if filtered_projects:
+        filtered_projects = arch.get_cached(archive_key)   # ← исправлено
+        if filtered_projects is not None:
             await arch.send_archive_chunked(
                 callback=callback,
                 projects=filtered_projects,
