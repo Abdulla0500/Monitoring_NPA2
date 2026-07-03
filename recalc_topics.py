@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 from database import Database
 from classifier import ProjectClassifier
@@ -7,23 +8,24 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 async def apply_batch_update(db, updates):
-    """Обновляет пачку проектов одним запросом"""
+    """Обновляет пачку проектов через unnest с массивами int[] и text[]"""
     if not updates:
         return
     ids = [u[0] for u in updates]
-    topics_list = [u[1] for u in updates]  # каждый элемент — список тем
+    # Превращаем каждый список тем в JSON-строку
+    topics_json_strings = [json.dumps(u[1], ensure_ascii=False) for u in updates]
     query = """
         UPDATE projects AS p
         SET topics = t.topics_json::jsonb
         FROM (
             SELECT 
                 unnest($1::int[]) AS external_id,
-                unnest($2::jsonb[]) AS topics_json
+                unnest($2::text[]) AS topics_json
         ) AS t
         WHERE p.external_id = t.external_id
     """
     async with db.pool.acquire() as conn:
-        await conn.execute(query, ids, topics_list)
+        await conn.execute(query, ids, topics_json_strings)
 
 async def recalc_topics_paginated(db, batch_size=5000):
     logger.info("🚀 Запуск пересчета классификации с пагинацией...")
@@ -52,9 +54,10 @@ async def recalc_topics_paginated(db, batch_size=5000):
             title = row.get('title', '')
             dept = row.get('department', '') or ''
             new_topics = ProjectClassifier.classify(title, dept)
-            # Защита от set (если классификатор вернул множество)
             if isinstance(new_topics, set):
                 new_topics = list(new_topics)
+            if not isinstance(new_topics, list):
+                new_topics = list(new_topics) if new_topics else []
             updates.append((row['id'], new_topics))
 
         if updates:
