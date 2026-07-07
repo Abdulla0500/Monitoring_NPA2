@@ -12,7 +12,7 @@ class Database:
     # -------------------- ПОДКЛЮЧЕНИЕ --------------------
     async def connect(self):
         max_retries = 10
-
+ 
         for attempt in range(max_retries):
             try:
                 self.pool = await asyncpg.create_pool(**config1.DB_CONFIG)
@@ -37,7 +37,8 @@ class Database:
                 department VARCHAR(255),
                 role VARCHAR(50) DEFAULT 'analyst',
                 notification_time TIME DEFAULT  '06:00',
-                registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_notification_date DATE DEFAULT CURRENT_DATE
             )
             """,
             """
@@ -278,6 +279,9 @@ class Database:
         async with self.pool.acquire() as conn:
             return await conn.fetchrow(query, external_id)
     # -------------------- УВЕДОМЛЕНИЯ --------------------
+    async def update_user_last_date(self, user_id, date):
+        query = "UPDATE users SET last_notification_date = $1 WHERE user_id = $2"
+        await self.execute(query, date, user_id)
     async def log_notification(self, user_id, project_id):
         query = """
         INSERT INTO notifications_log (user_id, project_id)
