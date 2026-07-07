@@ -3,3 +3,4 @@ python-dotenv==1.0.0
 aiogram>=3.0.0
 asyncpg>=0.29.0
 apscheduler>=3.10.0
+holidays==0.61
