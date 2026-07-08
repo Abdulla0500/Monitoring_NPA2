@@ -8,9 +8,10 @@ from roles import format_project_analyst, format_project_lawyer, format_project_
 async def send_daily_notifications(bot):
     db = Database()
     await db.connect()
-    now = datetime.now()
+    #now = datetime.now()
+    #today = now.date()
+    now = datetime(2026, 1, 1, 9, 0, 0)   # 1 января 2026, 9:00
     today = now.date()
-
     ru_holidays = holidays.Russia()
     if today in ru_holidays or now.weekday() in (5, 6):
         await db.close()
