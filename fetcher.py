@@ -57,7 +57,10 @@ class RegulationAPI:
                         return projects, total_count
 
                     else:
-                        print(f"⚠️ Страница {page}: статус {response.status}")
+                        error_text = await response.text()
+                        print(f"⚠️ Страница {page}: статус {response.status}, тело: {error_text[:500]}")
+                        print(f"   📤 Отправлено: {payload}")
+                        print(f"   📥 Ответ: {error_text[:1000]}")
 
             except Exception as e:
                 print(f"❌ Страница {page}, попытка {attempt}: {e}")
@@ -115,7 +118,10 @@ class RegulationAPI:
                         total_count = data.get('totalCount', 0)
                         return projects, total_count
                     else:
-                        print(f"⚠️ Страница {page}: статус {response.status}")
+                        error_text = await response.text()
+                        print(f"⚠️ Страница {page}: статус {response.status}, тело: {error_text[:500]}")
+                        print(f"   📤 Отправлено: {payload}")
+                        print(f"   📥 Ответ: {error_text[:1000]}")
             except Exception as e:
                 print(f"❌ Страница {page}, попытка {attempt}: {e}")
             
