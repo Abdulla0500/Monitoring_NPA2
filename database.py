@@ -38,7 +38,7 @@ class Database:
                 role VARCHAR(50) DEFAULT 'analyst',
                 notification_time TIME DEFAULT  '06:00',
                 registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                last_notification_date DATE DEFAULT CURRENT_DATE
+                last_notification_date DATE DEFAULT (CURRENT_DATE - INTERVAL '1 day')
             )
             """,
             """
@@ -336,7 +336,7 @@ class Database:
         except (ValueError, AttributeError):
             return []
         query = """
-            SELECT telegram_id, user_id, role
+            SELECT telegram_id, user_id, role, last_notification_date
             FROM users
             WHERE notification_time = $1
         """
