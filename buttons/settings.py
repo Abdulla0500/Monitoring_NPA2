@@ -90,8 +90,8 @@ async def show_time_selection(callback,db):
     current_time = await db.get_notification_time(callback.from_user.id)
 
     keyboard = []
-    times = ["06:00", "07:00", "08:00", "09:00","09:42","09:56", "10:08",
-             "12:00", "15:00", "19:29"]
+    times = ["06:00", "07:00", "08:00", "09:00","10:00",
+             "12:00", "15:00", "16:00"]
 
     for t in times:
         text = f"✅ {t}" if t == current_time else t
