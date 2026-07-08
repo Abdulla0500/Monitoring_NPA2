@@ -10,7 +10,7 @@ async def send_daily_notifications(bot):
     await db.connect()
     #now = datetime.now()
     #today = now.date()
-    now = datetime(2026, 11, 5, 9, 0, 0)   # 4 ноября 2026, 9:00
+    now = datetime(2025, 11, 6, 9, 0, 0)   # 4 ноября 2026, 9:00
     today = now.date()
     ru_holidays = holidays.Russia()
     if today in ru_holidays or now.weekday() in (5, 6):
