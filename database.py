@@ -281,7 +281,8 @@ class Database:
     # -------------------- УВЕДОМЛЕНИЯ --------------------
     async def update_user_last_date(self, user_id, date):
         query = "UPDATE users SET last_notification_date = $1 WHERE user_id = $2"
-        await self.execute(query, date, user_id)
+        async with self.pool.acquire() as conn:
+            await conn.execute(query, date, user_id)
     async def log_notification(self, user_id, project_id):
         query = """
         INSERT INTO notifications_log (user_id, project_id)

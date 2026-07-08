@@ -23,17 +23,15 @@ async def send_daily_notifications(bot):
         user_id_db = user['user_id']
         tg_id = user['telegram_id']
         role = user['role']
-
         last_date = user.get('last_notification_date')
-        if last_date is None:
-            await db.update_user_last_date(user_id_db, today - timedelta(days=1))
-            continue
 
-        start_date = last_date + timedelta(days=1)
+        if last_date is None:
+            start_date = today - timedelta(days=7)
+        else:
+            start_date = last_date + timedelta(days=1)
         end_date = today - timedelta(days=1)
 
         if start_date > end_date:
-            await db.update_user_last_date(user_id_db, today)
             continue
 
         projects = []
@@ -55,7 +53,7 @@ async def send_daily_notifications(bot):
             text = format_no_projects(date_list)
             await bot.send_message(tg_id, text, parse_mode='Markdown')
 
-        await db.update_user_last_date(user_id_db, today)
+        await db.update_user_last_date(user_id_db, end_date)
         await asyncio.sleep(0.3)
 
     await db.close()
