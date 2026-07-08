@@ -70,15 +70,23 @@ class RegulationAPI:
 
         print(f" Страница {page} не загрузилась после {retries} попыток")
         return [], 0
-    async def _fetch_projects_filtered(self, session, page=1, pageSize=20, 
-                                       start_date=None, end_date=None, retries=3):
-        """Внутренний метод с фильтрацией (используется только для дат)"""
+    async def _fetch_projects_filtered(self, session, page=1, pageSize=20, start_date=None, end_date=None, retries=3):
         url = f"{self.base_url}/api/public/PublicProjects/GetFiltered"
-        
+        filters_str = ""
+        if start_date or end_date:
+            filter_parts = []
+            if start_date:
+                start_str = start_date if 'T' in str(start_date) else f"{start_date}T00:00:00"
+                filter_parts.append(f"publicationDate>={start_str}")
+            if end_date:
+                end_str = end_date if 'T' in str(end_date) else f"{end_date}T23:59:59"
+                filter_parts.append(f"publicationDate<={end_str}")
+            filters_str = ",".join(filter_parts)
+
         payload = {
             "listParams": {
                 "filterModel": {
-                    "filters": "",
+                    "filters": filters_str,
                     "page": page,
                     "pageSize": pageSize
                 }
@@ -88,23 +96,7 @@ class RegulationAPI:
                 "creationDate", "publicationDate", "stage", "status", "procedure"
             ]
         }
-        
-        # Добавляем фильтр только если указаны даты
-        if start_date or end_date:
-            date_filter = {
-                "field": "publicationDate",
-                "type": "dateRange",
-                "value": {}
-            }
-            
-            if start_date:
-                date_filter["value"]["start"] = start_date
-            if end_date:
-                date_filter["value"]["end"] = end_date
-                
-            payload["listParams"]["filterModel"]["filters"] = date_filter
-        
-        # Остальной код такой же как в fetch_projects
+
         for attempt in range(1, retries + 1):
             try:
                 async with session.post(
@@ -119,15 +111,15 @@ class RegulationAPI:
                         return projects, total_count
                     else:
                         error_text = await response.text()
-                        print(f"⚠️ Страница {page}: статус {response.status}, тело: {error_text[:500]}")
+                        print(f"⚠️ Страница {page}: статус {response.status}")
                         print(f"   📤 Отправлено: {payload}")
                         print(f"   📥 Ответ: {error_text[:1000]}")
             except Exception as e:
                 print(f"❌ Страница {page}, попытка {attempt}: {e}")
-            
+
             if attempt < retries:
                 await asyncio.sleep(1 * attempt)
-        
+
         print(f"❌ Страница {page} не загрузилась после {retries} попыток")
         return [], 0
     async def fetch_all_projects_optimized(self, max_pages=500, page_size=20, max_concurrent=20):
