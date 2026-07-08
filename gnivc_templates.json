@@ -1,0 +1,304 @@
+[
+  {
+    "title": "Шаблоны форм налоговых деклараций (расчетов) и иных документов служащих основанием для уплаты налогов и сборов",
+    "release_date": "03.07.2026",
+    "documents": [
+      {
+        "name": "vnimanie.doc",
+        "url": "https://gnivc.ru/static/3185b1906d25b12d8e8cadc4aed827f2/vnimanie_03_07_2026.doc"
+      },
+      {
+        "name": "ReadMe.doc",
+        "url": "https://gnivc.ru/static/61461e5baabec68095506769749c2d92/ReadMe_03_07_2026.docx"
+      },
+      {
+        "name": "shabl.zip",
+        "url": "https://gnivc.ru/static/5584599782f327f70c24ecefab7ac5b8/shabl_03_07_2026.zip"
+      }
+    ],
+    "updates": [
+      {
+        "name": "Шаблон 1151020_5.21000_28.tif",
+        "url": "https://gnivc.ru/static/410471a4d2b85c0d941a50c5d2c82057/1151020_5_21000_28.tif",
+        "description": "1151020_5.21000_28 «Налоговая декларация по налогу на доходы физических лиц (форма 3-НДФЛ)»\nОснование: Приказ Федеральной налоговой службы от 25.05.2026 № ЕД-1-11/333@"
+      },
+      {
+        "name": "Шаблон 1154004_5.01000_01.tif",
+        "url": "https://gnivc.ru/static/3e50788411b3cd9623c1874148bbe1e9/1154004_5_01000_01.tif",
+        "description": "1154004_5.01000_01 «Уведомление (сообщение) по упрощенной системе налогообложения»\nОснование: Приказ ФНС от 30.04.2026 № ЕД-1-3/285@"
+      }
+    ]
+  },
+  {
+    "title": "Шаблоны форм используемые при постановке на учет (шаблоны учетных форм, перечень шаблонов)",
+    "release_date": "28.10.2024",
+    "documents": [
+      {
+        "name": "ReadMe.doc",
+        "url": "https://gnivc.ru/static/cb0e241a6ea0e90187b2eb253788d68c/ReadMe_1.docx"
+      },
+      {
+        "name": "uchshabl.zip",
+        "url": "https://gnivc.ru/static/137f443cf57603c527dcc193dcf1feb9/uchshabl.zip"
+      },
+      {
+        "name": "vnimanie.doc",
+        "url": "https://gnivc.ru/static/e418b7e3929e1c037dc7cfa0ed0723dd/vnimanie_1.doc"
+      }
+    ],
+    "updates": [
+      {
+        "name": "Шаблон 1110465_5.01000_01.zip",
+        "url": "https://gnivc.ru/static/6a88a7806d7c29bf0623c07c8443e70a/1110465_5_01000_01.zip",
+        "description": "Запрос выписки из Единого государственного реестра налогоплательщиков.\nОснование: Приказ ФНС России от 13.11.2025 № ЕД-7-14/975@"
+      }
+    ]
+  },
+  {
+    "title": "Шаблоны форм бухгалтерской отчетности",
+    "release_date": "10.07.2020",
+    "documents": [
+      {
+        "name": "bushabl.zip",
+        "url": "https://gnivc.ru/static/2900ef6417124c08c141ff34e582c735/bushabl.zip"
+      },
+      {
+        "name": "vnimanie.doc",
+        "url": "https://gnivc.ru/static/a6dc04ea9a5a362e0e295b39755dc659/vnimanie_2.doc"
+      }
+    ],
+    "updates": []
+  },
+  {
+    "title": "Шаблон формы заявления о регистрации ККТ",
+    "release_date": "12.10.2012",
+    "documents": [
+      {
+        "name": "shablkkt121012.rar",
+        "url": "https://gnivc.ru/static/6bf133e94502ed23fec53d88d5507bfb/shablkkt121012.rar"
+      }
+    ],
+    "updates": []
+  },
+  {
+    "title": "Документы контролируемой иностранной компании",
+    "release_date": "13.12.2023",
+    "documents": [
+      {
+        "name": "ReadMe.doc",
+        "url": "https://gnivc.ru/static/a8c5726a4254fa9573842ac6fc1828b8/readme_8.doc"
+      },
+      {
+        "name": "Перечень шаблонов печати документов с двухмерным штрих-кодом PDF417",
+        "url": "https://gnivc.ru/static/35de7d1d63c845440f5d1bff5f84766d/vnimanie_3.doc"
+      },
+      {
+        "name": "shabl_kik.zip",
+        "url": "https://gnivc.ru/static/af6cd95e316f4e40852141bcc0a17079/shabl_kik.zip"
+      }
+    ],
+    "updates": [
+      {
+        "name": "Шаблон 1120416_5.04000_05.zip",
+        "url": "https://gnivc.ru/static/6a88a7806d7c29bf0623c07c8443e70a/1110465_5_01000_01.zip",
+        "description": "Уведомление о контролируемых иностранных компаниях.\nОснование: Приказ ФНС России от 19.07.2021 № ЕД-7-13/671@ в редакции приказа ФНС России от 09.10.2023 № ЕД-7-13/721@"
+      }
+    ]
+  },
+  {
+    "title": "Шаблоны форм используемые при государственной регистрации",
+    "release_date": "05.12.2024",
+    "documents": [
+      {
+        "name": "Шаблоны регистрационных форм",
+        "url": "https://gnivc.ru/static/5452630d151419c3e0cf74da6b47a26b/shablreg.zip"
+      },
+      {
+        "name": "Перечень шаблонов",
+        "url": "https://gnivc.ru/static/577213d8fcce0e6cdb9e7a5e5cc307af/vnimanie_4.doc"
+      },
+      {
+        "name": "ReadMe.doc",
+        "url": "https://gnivc.ru/static/7ec0f1c99e28f889f38a94285a318279/ReadMe_2.docx"
+      }
+    ],
+    "updates": [
+      {
+        "name": "Шаблон 1111662_5.01000_01.zip",
+        "url": "https://gnivc.ru/static/13e12c04154960750b468992b9dae93f/1111662_5_01000_01.zip",
+        "description": "Заявление, содержащее сведения о принятии решения о прекращении процедуры исключения юридического лица, отнесенного к субъекту малого или среднего предпринимательства, \nиз Единого государственного реестра юридических лиц\n(Форма № Р19002)."
+      },
+      {
+        "name": "Шаблон 1157012_5.02000_02.zip",
+        "url": "https://gnivc.ru/static/6ac7abb3fa09ac55be4841d1405dbeea/1157012_5_02000_02.zip",
+        "description": "Заявление об исключении юридического лица, отнесенного к субъекту малого или среднего предпринимательства, из Единого государственного реестра юридических лиц (Форма № Р19001).\n\nОснование: Приказ ФНС РФ от 22 апреля 2024 г. № ЕД-7-14/329@"
+      }
+    ]
+  },
+  {
+    "title": "Шаблоны форм по аккредитации",
+    "release_date": "15.09.2021",
+    "documents": [
+      {
+        "name": "shablakkr.zip",
+        "url": "https://gnivc.ru/static/8f20930d3ac453f6996b55849b6efb6d/shablakkr.zip"
+      },
+      {
+        "name": "Перечень шаблонов",
+        "url": "https://gnivc.ru/static/bb9914945baaccc9bf0709568d61b4da/vnimanie_5.doc"
+      },
+      {
+        "name": "ReadMe.docx",
+        "url": "https://gnivc.ru/static/b7a3789d78b02f6750cf0a7aa6fc5519/readme_9.doc"
+      }
+    ],
+    "updates": []
+  },
+  {
+    "title": "Уведомление об участии в иностранных организациях (об учреждении иностранных структур без образования юридического лица)",
+    "release_date": "07.10.2019",
+    "documents": [
+      {
+        "name": "1120411_kik.zip",
+        "url": "https://gnivc.ru/static/0eb7fbdffd49f330e6f47f250fd9bbdc/1120411_kik.zip"
+      }
+    ],
+    "updates": []
+  },
+  {
+    "title": "Шаблоны уведомлений о контролируемых иностранных компаниях",
+    "release_date": "21.01.2025",
+    "documents": [
+      {
+        "name": "shabluks.zip",
+        "url": "https://gnivc.ru/static/d0dea9ff3209a665f95940e6daefad9d/shabluks.zip"
+      },
+      {
+        "name": "ReadMe.docx",
+        "url": "https://gnivc.ru/static/6ace187936387b0592eb55f6638cb47f/ReadMe_3.docx"
+      },
+      {
+        "name": "vnimanie.doc",
+        "url": "https://gnivc.ru/static/63faa3cf4860ac2971e82f9754cfb9a4/vnimanie_6.doc"
+      }
+    ],
+    "updates": [
+      {
+        "name": "Шаблон 1154004_5.01000_01.tif",
+        "url": "https://gnivc.ru/static/3e50788411b3cd9623c1874148bbe1e9/1154004_5_01000_01.tif",
+        "description": "1154004_5.01000_01 «Уведомление (сообщение) по упрощенной системе налогообложения»\nОснование: Приказ ФНС от 30.04.2026 № ЕД-1-3/285@"
+      }
+    ]
+  },
+  {
+    "title": "Согласие налогоплательщика (плательщика страховых взносов) на представление налоговым органом сведений о налогоплательщике (плательщике страховых взносов), составляющих налоговую тайну, иному лицу или признание таких сведений общедоступными",
+    "release_date": "09.12.2022",
+    "documents": [
+      {
+        "name": "1110058.zip",
+        "url": "https://gnivc.ru/static/876248392dc96573e28013af8b9b8d00/1110058.zip"
+      },
+      {
+        "name": "ReadMe.docx",
+        "url": "https://gnivc.ru/static/6223710773e3f830e090d565535692a9/ReadMe_4.docx"
+      },
+      {
+        "name": "vnimanie.doc",
+        "url": "https://gnivc.ru/static/664037fe3fdae58e1eb5db9f0b6ca65a/vnimanie_7.doc"
+      }
+    ],
+    "updates": [
+      {
+        "name": "1110058_5.03000_02.zip",
+        "url": "https://gnivc.ru/static/08bbecdcccd6308e2fb23a3a1447a64a/1110058_5_03000_02.zip",
+        "description": "«Согласие налогоплательщика (плательщика страховых взносов) на представление налоговым органом сведений о налогоплательщике (плательщике страховых взносов), составляющих налоговую тайну, иному лицу или признание таких сведений общедоступными»\nПриказ ФНС России от 14.11.2022 № ЕД-7-19/1085@"
+      }
+    ]
+  },
+  {
+    "title": "Запрос на предоставление сведений, составляющих налоговую тайну, признанных общедоступными в соответствии с пунктом 1 статьи 102 Налогового кодекса Российской Федерации",
+    "release_date": "28.05.2018",
+    "documents": [
+      {
+        "name": "1110070_5.01000_01.rar",
+        "url": "https://gnivc.ru/static/3f3e67116171d9ec2a157c53599c85d2/1110070_5_01000_01.rar"
+      }
+    ],
+    "updates": []
+  },
+  {
+    "title": "Шаблоны форм документов по расчетам с денежными средствами",
+    "release_date": "29.05.2026",
+    "documents": [
+      {
+        "name": "vnimanie.doc",
+        "url": "https://gnivc.ru/static/3827960df4306f04d32b7dafc9a71bb9/vnimanie_29_05_2026.doc"
+      },
+      {
+        "name": "ReadMe.docx",
+        "url": "https://gnivc.ru/static/4ae2214b91742b5840e91968e9ced088/ReadMe_29_05_2026.docx"
+      },
+      {
+        "name": "shabldenrasch.zip",
+        "url": "https://gnivc.ru/static/6b28a0455bdde3bd0f91da72df71c272/shabldenrasch_29_05_2026.zip"
+      }
+    ],
+    "updates": [
+      {
+        "name": "Шаблон 1121149_5.01000_01.tif",
+        "url": "https://gnivc.ru/static/8eac9596a36bbfaa73fe900654b3d19f/1121149_5_01000_01.tif",
+        "description": "«Заявление о возврате обеспечительного платежа»\nОснование: Письмо ФНС России от 28.05.2026 № КЧ-36-8/4584@"
+      }
+    ]
+  },
+  {
+    "title": "Уведомление о наступлении обстоятельств, влекущих изменение сведений, указанных в свидетельстве о регистрации лица, совершающего операции по переработке нефтяного сырья",
+    "release_date": "05.07.2021",
+    "documents": [
+      {
+        "name": "vnimanie.doc",
+        "url": "https://gnivc.ru/static/30639e098eb05dd522e0564fa44278e9/vnimanie_9.doc"
+      },
+      {
+        "name": "ReadMe.docx",
+        "url": "https://gnivc.ru/static/a91a30bb63de522cb465152c11db97c0/ReadMe_6.docx"
+      },
+      {
+        "name": "sabluvedakciz.zip",
+        "url": "https://gnivc.ru/static/dbfca9e18d1cbbb6373504a917880874/sabluvedakciz.zip"
+      }
+    ],
+    "updates": [
+      {
+        "name": "Шаблон 1111634_5.01000_01.rar",
+        "url": "https://gnivc.ru/static/8df05cfee08d191cd8fae6058df7479c/1111634_5_01000_01.rar",
+        "description": "Уведомление о наступлении обстоятельств, влекущих изменение сведений, указанных в свидетельстве о регистрации лица, совершающего операции по переработке нефтяного сырья.\nОснование: Письмо ФНС России от 30.06.2021 №ЕА-4-15/9142@"
+      }
+    ]
+  },
+  {
+    "title": "Шаблоны печати документов по налоговому вычету по долгосрочным сбережениям граждан",
+    "release_date": "21.01.2025",
+    "documents": [
+      {
+        "name": "vnimanie.doc",
+        "url": "https://gnivc.ru/static/c27d4c55f9db574d9ad92779098866fb/vnimanie_10.doc"
+      },
+      {
+        "name": "shabl_iis.zip",
+        "url": "https://gnivc.ru/static/eb91954fca5f102b751aa68d94c2d00b/shabl_iis.zip"
+      },
+      {
+        "name": "ReadMe.docx",
+        "url": "https://gnivc.ru/static/e72bc365ea2a15cd2c96d680efd220e4/ReadMe.doc"
+      }
+    ],
+    "updates": [
+      {
+        "name": "Шаблон 1150146_5.01000_01.zip",
+        "url": "https://gnivc.ru/static/31d6cf2c4144284d1ff176e82135a9dd/1150146_5_01000_01.zip",
+        "description": "Заявление о применении в отношении договора на ведение индивидуального инвестиционного счета, заключенного в 2024 году, инвестиционного налогового вычета в соответствии с подпунктами 2 или 3 пункта 1 статьи 219.1 Налогового кодекса Российской Федерации.\nОснование: Письмо ФНС России от 28.12.2024 № БС-4-11/14743@"
+      }
+    ]
+  }
+]

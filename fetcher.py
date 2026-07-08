@@ -221,7 +221,7 @@ class RegulationAPI:
         print("=" * 70)
         print(f"ЗАГРУЗКА ПРОЕКТОВ ЗА ПЕРИОД: {start_date} - {end_date}")
         print("=" * 70)
-        start_load=time.time()
+        start_load = time.time()
 
         async with aiohttp.ClientSession(headers=self.headers) as session:
             first_projects, total_count = await self._fetch_projects_filtered(
@@ -244,7 +244,8 @@ class RegulationAPI:
             semaphore = asyncio.Semaphore(max_concurrent)
             async def fetch_page(page_num):
                 async with semaphore:
-                    projects, _ = await self.fetch_projects(
+                    # ВАЖНО: используем _fetch_projects_filtered, а не fetch_projects
+                    projects, _ = await self._fetch_projects_filtered(
                         session, 
                         page=page_num, 
                         pageSize=page_size,
@@ -254,6 +255,7 @@ class RegulationAPI:
                     if projects:
                         print(f"   ✅ Страница {page_num}: {len(projects)} проектов")
                     return projects
+            
             if total_pages > 1:
                 tasks = [fetch_page(page) for page in range(2, total_pages + 1)]
                 results = await asyncio.gather(*tasks)
@@ -266,7 +268,6 @@ class RegulationAPI:
             print(f"\n⏱ Время загрузки: {load_time:.2f} секунд")
             print(f"🎯 ЗАГРУЖЕНО: {len(all_projects)} ПРОЕКТОВ")
             
-            # Классифицируем проекты
             for p in all_projects:
                 title = p.get('title', '')
                 dept = p.get('developedDepartment')
